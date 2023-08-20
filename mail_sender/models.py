@@ -43,7 +43,7 @@ class MailingList(models.Model):
     name = models.CharField(max_length=100, verbose_name='название рассылки')
     settings = models.ForeignKey(Settings, verbose_name='настройки рассылки', on_delete=models.CASCADE)
     status = models.CharField(max_length=15, choices=Status.choices, default=Status.CREATED, verbose_name='статус')
-    clients = models.ManyToManyField(Client)
+    clients = models.ManyToManyField(Client, verbose_name='клиенты')
 
     def get_clients(self):
         return ', '.join([str(c) for c in self.clients.all()])
@@ -59,7 +59,10 @@ class MailingList(models.Model):
 class Mail(models.Model):
     subject = models.CharField(max_length=150, verbose_name='тема письма')
     body = models.TextField(verbose_name='тело письма', **NULLABLE)
-    mailing_list = models.ForeignKey(MailingList, verbose_name='рассылка', on_delete=models.CASCADE)
+    mailing_list = models.ManyToManyField(MailingList, verbose_name='рассылка')
+
+    def get_mailing_lists(self):
+        return '", "'.join([str(m) for m in self.mailing_list.all()])
 
     def __str__(self):
         return f'Письмо: {self.subject}'
@@ -74,8 +77,8 @@ class MailingLog(models.Model):
         SUCCESS = 'успешно'
         FAIL = 'неудача'
 
-    last_send = models.DateTimeField(verbose_name='последняя попытка')
-    status = models.CharField(max_length=10, choices=Status.choices, default=Status.FAIL, verbose_name='статус попытки')
+    last_send = models.DateTimeField(verbose_name='последняя попытка', auto_now_add=True)
+    status = models.CharField(max_length=10, choices=Status.choices, verbose_name='статус попытки')
     server_report = models.TextField(verbose_name='ответ почтового сервера', **NULLABLE)
     mailing_list = models.ForeignKey(MailingList, verbose_name='рассылка', on_delete=models.CASCADE)
 

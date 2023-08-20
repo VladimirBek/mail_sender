@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, TemplateView, DeleteView, CreateView, UpdateView, DetailView
 
-from mail_sender.models import Client, MailingList
+from mail_sender.models import Client, MailingList, Mail
 
 
 class IndexView(TemplateView):
@@ -74,3 +74,36 @@ class MailingDelete(DeleteView):
     model = MailingList
     template_name = 'mailing_delete.html'
     success_url = reverse_lazy('mail_sender:mailing_list')
+
+
+class MailList(ListView):
+    model = Mail
+    template_name = 'mail_list.html'
+
+
+class MailDetail(DetailView):
+    model = Mail
+    template_name = 'mail_detail.html'
+
+
+class MailCreate(CreateView):
+    model = Mail
+    template_name = 'mail_form.html'
+    fields = ('subject', 'body', 'mailing_list',)
+    success_url = reverse_lazy('mail_sender:mail_list')
+
+
+class MailUpdate(UpdateView):
+    model = Mail
+    template_name = 'mail_form.html'
+    fields = ('subject', 'body', 'mailing_list',)
+
+    def get_success_url(self):
+        return reverse('mail_sender:mail_detail', args=[self.object.pk])
+
+
+class MailDelete(DeleteView):
+    model = Mail
+    template_name = 'mail_delete.html'
+    success_url = reverse_lazy('mail_sender:mail_list')
+

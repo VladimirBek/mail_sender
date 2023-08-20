@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="px-3 py-3 pt-md-5 pb-md-4 mx-auto">
+        <a href="{% url 'mail_sender:mail_create' %}" class="btn btn-primary">Создание нового письма</a>
+    </div>
+</div>
+
+{% for object in object_list %}
+<div class="container">
+    <div class="list-group">
+        <a href="{% url 'mail_sender:mail_detail' object.pk %}" class="list-group-item list-group-item-action">
+            {{ object.subject }}</a>
+    </div>
+</div>
+
+{% endfor %}
+
+{% endblock %}
