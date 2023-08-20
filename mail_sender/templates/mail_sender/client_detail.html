@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <div class="card" style="width: 80rem;">
+        <div class="card-body">
+            <h5 class="card-title">{{ object.name }}</h5>
+            <p class="card-text">
+            <ul>
+                <li>{{object.email}}</li>
+                <li>{{object.comment}}</li>
+            </ul>
+            </p>
+            <a href="{% url 'mail_sender:client_update' object.pk %}" class="btn btn-primary">Редактировать</a>
+            <a href="{% url 'mail_sender:client_delete' object.pk %}" class="btn btn-danger">Удалить</a>
+            <a href="{% url 'mail_sender:clients_list' %}" class="btn btn-outline-secondary">К клиентам</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

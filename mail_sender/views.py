@@ -1,3 +1,45 @@
 from django.shortcuts import render
+from django.urls import reverse_lazy, reverse
+from django.views.generic import ListView, TemplateView, DeleteView, CreateView, UpdateView, DetailView
 
-# Create your views here.
+from mail_sender.models import Client, MailingList
+
+
+class IndexView(TemplateView):
+    template_name = 'index.html'
+    extra_context = {
+        'title': 'Mail Sender Plus'
+    }
+
+
+class ClientsList(ListView):
+    model = Client
+    template_name = 'clients_list.html'
+
+
+class ClientDetail(DetailView):
+    model = Client
+    template_name = 'client_detail.html'
+
+
+class ClientCreate(CreateView):
+    model = Client
+    fields = ('name', 'email', 'comment',)
+    template_name = 'client_create.html'
+    success_url = reverse_lazy('mail_sender:clients_list')
+
+
+class ClientUpdate(UpdateView):
+    model = Client
+    fields = ('name', 'email', 'comment',)
+    template_name = 'client_create.html'
+
+    def get_success_url(self):
+        return reverse('mail_sender:client_detail', args=[self.object.pk])
+
+
+class ClientDelete(DeleteView):
+    model = Client
+    template_name = 'client_delete.html'
+    success_url = reverse_lazy('mail_sender:clients_list')
+
