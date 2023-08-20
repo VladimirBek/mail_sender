@@ -1,7 +1,8 @@
 from django.urls import path
 
 from .apps import MailSenderConfig
-from .views import IndexView, ClientsList, ClientDetail, ClientCreate, ClientUpdate, ClientDelete, Mailing_list
+from .views import IndexView, ClientsList, ClientDetail, ClientCreate, ClientUpdate, ClientDelete, MailingLists, \
+    MailingDetail, MailingCreate, MailingUpdate, MailingDelete
 
 app_name = MailSenderConfig.name
 
@@ -12,6 +13,10 @@ urlpatterns = [
     path('create_client', ClientCreate.as_view(), name='client_create'),
     path('update_client/<int:pk>', ClientUpdate.as_view(), name='client_update'),
     path('delete_client/<int:pk>', ClientDelete.as_view(), name='client_delete'),
-    path('mailing_lists', Mailing_list.as_view(), name='mailing_list'),
+    path('mailing_lists/', MailingLists.as_view(), name='mailing_list'),
+    path('mailing_detail/<int:pk>', MailingDetail.as_view(), name='mailing_detail'),
+    path('mailing_create/', MailingCreate.as_view(), name='mailing_create'),
+    path('mailing_update/<int:pk>', MailingUpdate.as_view(), name='mailing_update'),
+    path('mailing_delete/<int:pk>', MailingDelete.as_view(), name='mailing_delete'),
 
 ]

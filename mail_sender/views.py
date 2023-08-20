@@ -43,3 +43,34 @@ class ClientDelete(DeleteView):
     template_name = 'client_delete.html'
     success_url = reverse_lazy('mail_sender:clients_list')
 
+
+class MailingLists(ListView):
+    model = MailingList
+    template_name = 'mailing_list.html'
+
+
+class MailingDetail(DetailView):
+    model = MailingList
+    template_name = 'mailing_detail.html'
+
+
+class MailingCreate(CreateView):
+    model = MailingList
+    template_name = 'mailing_form.html'
+    fields = ('name', 'settings', 'settings', 'clients')
+    success_url = reverse_lazy('mail_sender:mailing_list')
+
+
+class MailingUpdate(UpdateView):
+    model = MailingList
+    template_name = 'mailing_form.html'
+    fields = ('name', 'settings', 'settings', 'status', 'clients')
+
+    def get_success_url(self):
+        return reverse('mail_sender:mailing_detail', args=[self.object.pk])
+
+
+class MailingDelete(DeleteView):
+    model = MailingList
+    template_name = 'mailing_delete.html'
+    success_url = reverse_lazy('mail_sender:mailing_list')

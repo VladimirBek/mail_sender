@@ -43,7 +43,10 @@ class MailingList(models.Model):
     name = models.CharField(max_length=100, verbose_name='название рассылки')
     settings = models.ForeignKey(Settings, verbose_name='настройки рассылки', on_delete=models.CASCADE)
     status = models.CharField(max_length=15, choices=Status.choices, default=Status.CREATED, verbose_name='статус')
-    client = models.ManyToManyField(Client)
+    clients = models.ManyToManyField(Client)
+
+    def get_clients(self):
+        return ', '.join([str(c) for c in self.clients.all()])
 
     def __str__(self):
         return f'{self.name} ({self.status})'
