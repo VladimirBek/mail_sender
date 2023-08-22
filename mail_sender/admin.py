@@ -28,4 +28,4 @@ class MailAdmin(admin.ModelAdmin):
 
 @admin.register(MailingLog)
 class LogsAdmin(admin.ModelAdmin):
-    list_display = ('id', 'last_send', 'status', 'server_report', 'client', 'mailing_list',)
+    list_display = ('id', 'last_send', 'status', 'server_report', 'get_clients', 'mailing_list',)

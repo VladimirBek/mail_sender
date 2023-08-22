@@ -80,8 +80,11 @@ class MailingLog(models.Model):
     last_send = models.DateTimeField(verbose_name='последняя попытка', auto_now_add=True)
     status = models.CharField(max_length=10, choices=Status.choices, verbose_name='статус попытки')
     server_report = models.TextField(verbose_name='ответ почтового сервера', **NULLABLE)
-    client = models.ForeignKey(Client, verbose_name='клиент', on_delete=models.CASCADE)
+    clients = models.ManyToManyField(Client, verbose_name='клиент')
     mailing_list = models.ForeignKey(MailingList, verbose_name='рассылка', on_delete=models.CASCADE)
+
+    def get_clients(self):
+        return ', '.join([str(c) for c in self.clients.all()])
 
     def __str__(self):
         return f'последняя попытка: {self.last_send}, статус: {self.status}, рассылка{self.mailing_list}'
