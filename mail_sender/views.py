@@ -21,6 +21,12 @@ class ClientDetail(DetailView):
     model = Client
     template_name = 'client_detail.html'
 
+    def get_context_data(self, **kwargs):
+        context = super(ClientDetail, self).get_context_data(**kwargs)
+        ml = [str(item) for item in MailingList.objects.filter(clients=self.object)]
+        context['mailing_lists'] = ', '.join(ml)
+        return context
+
 
 class ClientCreate(CreateView):
     model = Client
@@ -106,4 +112,3 @@ class MailDelete(DeleteView):
     model = Mail
     template_name = 'mail_delete.html'
     success_url = reverse_lazy('mail_sender:mail_list')
-

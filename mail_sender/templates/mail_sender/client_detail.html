@@ -8,6 +8,7 @@
             <ul>
                 <li>{{object.email}}</li>
                 <li>{{object.comment}}</li>
+                <li>Подписки: {{mailing_lists}}</li>
             </ul>
             </p>
             <a href="{% url 'mail_sender:client_update' object.pk %}" class="btn btn-primary">Редактировать</a>
