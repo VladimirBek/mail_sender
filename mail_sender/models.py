@@ -87,7 +87,7 @@ class MailingLog(models.Model):
         return ', '.join([str(c) for c in self.clients.all()])
 
     def __str__(self):
-        return f'последняя попытка: {self.last_send}, статус: {self.status}, рассылка{self.mailing_list}'
+        return f'последняя попытка: {self.last_send}, статус: {self.status}, рассылка: "{self.mailing_list}"'
 
     class Meta:
         verbose_name = 'лог рассылки'
