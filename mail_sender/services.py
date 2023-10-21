@@ -12,7 +12,8 @@ def execute_mailing(mailing_list: MailingList):
         subject = mail.subject
         body = mail.body
         recipients_list = [rec.email for rec in mailing_list.clients.all()]
-
+        status = 'успешно'
+        server_report = None
         try:
             send_mail(
                 subject=subject,
@@ -26,17 +27,14 @@ def execute_mailing(mailing_list: MailingList):
         except smtplib.SMTPException as error:
             status = 'неудача'
             server_report = error
-        except Exception:
-            status = 'неудача'
-            server_report = 'неизвестная ошибка'
         finally:
-            MailingLog.objects.create(
+            instance = MailingLog.objects.create(
                 last_send=datetime.now(timezone.utc),
                 status=status,
                 server_report=server_report,
-                clients=mailing_list.clients.all(),
                 mailing_list=mailing_list
             )
+            instance.clients.set(mailing_list.clients.all())
 
 
 def check_mailing_ready():
