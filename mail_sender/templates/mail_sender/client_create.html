@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <form method="post" enctype="multipart/form-data" class="form-floating">
+        <div class="px-3 py-3 pt-md-5 pb-md-4 mx-auto">
+            {% csrf_token %}
+            {{ form.as_p }}
+        </div>
+        <button type="submit" class="btn btn-primary">
+            {% if object %}
+            Сохранить
+            {% else %}
+            Зарегистрировать клиента
+            {% endif %}
+
+        </button>
+        <a href="{% url 'mail_sender:clients_list' %}" class="btn btn-secondary">Назад</a>
+    </form>
+</div>
+{% endblock %}

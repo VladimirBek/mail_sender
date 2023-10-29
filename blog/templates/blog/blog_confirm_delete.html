@@ -1,0 +1,22 @@
+{% extends 'mail_sender/base.html' %}
+
+{% block content %}
+    <div class="col">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">{{ object.name }}</h5>
+                <form method="post">
+                    {% csrf_token %}
+                    <div style="display: flex; align-items: center;">
+                        <span style="flex: 1;">Вы точно хотите удалить эту публикацию "{{ object|title }}"?</span>
+                        <input type="submit" class="btn btn-outline-danger ml-2" value="Уверен">
+                    </div>
+                </form>
+
+            </div>
+            <div class="card-footer mt-auto">
+                <a href="{% url 'blog:blogs' %}" class="btn btn-secondary m-2"><< Назад</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}>

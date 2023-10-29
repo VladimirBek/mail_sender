@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+    <div class="card" style="width: 80rem;">
+        <div class="card-body">
+            <h5 class="card-title">Рассылка "{{ object.name }}"</h5>
+            <p class="card-text">
+            <ul>
+                <li>Статус: "{{object.status|title}}"</li>
+                <li>{{object.settings}}</li>
+                <li>Клиенты: {{object.get_clients}}</li>
+            </ul>
+            </p>
+            {% if perms.mail_sender.change_mailing_list %}
+            <a href="{%url 'mail_sender:mailing_update' object.pk%}" class="btn btn-primary">Редактировать</a>
+            {% endif %}
+            {% if perms.mail_sender.change_delete_list %}
+            <a href="{%url 'mail_sender:mailing_delete' object.pk%}" class="btn btn-danger">Удалить</a>
+            {% endif %}
+            <a href="{% url 'mail_sender:mailing_list' %}" class="btn btn-outline-secondary">К списку рассылок</a>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

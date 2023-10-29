@@ -1,0 +1,50 @@
+{% extends 'mail_sender/base.html' %}
+{% block content %}
+
+<div class="album py-5 bg-body-tertiary" style="justify-content: center;">
+    <div class="container">
+        {% if user.is_active or user.is_superuser %}
+        <a href="{% url 'blog:blog_create' %}" class="btn btn-secondary m-2">Добавить публикацию</a>
+        <a href="{% url 'mail_sender:index' %}" class="btn btn-secondary m-2">Вернуться на главную</a>
+    </div>
+</div>
+{% endif %}
+<div class="album py-5 bg-body-tertiary">
+    <div class="container">
+        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 g-3">
+            {% for object in object_list %}
+            {% if user.is_staff or object.is_active or object.owner == user %}
+            <div class="col-md-5">
+                <div class="card mb-4 box-shadow">
+                    <div class="card-body">
+                        <p class="card-text">Тема: {{ object|title }}</p>
+                        <p class="card-text">Автор: {{ object.owner }}</p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="btn-group">
+                                <a href="{% url 'blog:blog_details' object.pk %}"
+                                   class="btn btn-sm btn-outline-secondary">Посмотреть публикацию</a>
+                                {% if object.owner == user %}
+                                <a href="{% url 'blog:blog_update' pk=object.pk %}" class="btn btn-primary btn-sm">Изменить</a>
+                                {% endif %}
+                                {% if user.is_staff %}
+                                {% if object.is_active == False %}
+                                <a href="{% url 'blog:blog_publish' pk=object.pk %}" class="btn btn-warning btn-sm">Опубликовать</a>
+                                {% elif object.is_active == True %}
+                                <a href="{% url 'blog:blog_publish' pk=object.pk %}" class="btn btn-danger btn-sm">Снять
+                                    с
+                                    публикации</a>
+                                {% endif %}
+                                <a href="{% url 'blog:blog_delete' object.pk %}"
+                                   class="btn btn-sm btn-outline-secondary">Удалить</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}
