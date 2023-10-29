@@ -10,8 +10,12 @@
                 <li>Тело письма: {{object.body}}</li>
             </ul>
             </p>
+            {% if perms.mail_sender.change_mail %}
             <a href="{%url 'mail_sender:mail_update' object.pk%}" class="btn btn-primary">Редактировать</a>
+            {% endif %}
+            {% if perms.mail_sender.delete_mail %}
             <a href="{%url 'mail_sender:mail_delete' object.pk%}" class="btn btn-danger">Удалить</a>
+            {% endif %}
             <a href="{% url 'mail_sender:mail_list' %}" class="btn btn-outline-secondary">К списку писем</a>
         </div>
     </div>

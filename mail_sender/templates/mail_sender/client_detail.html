@@ -11,8 +11,12 @@
                 <li>Подписки: {{mailing_lists}}</li>
             </ul>
             </p>
+            {% if perms.mail_sender.change_client %}
             <a href="{% url 'mail_sender:client_update' object.pk %}" class="btn btn-primary">Редактировать</a>
+            {% endif %}
+            {% if perms.mail_sender.delete_client %}
             <a href="{% url 'mail_sender:client_delete' object.pk %}" class="btn btn-danger">Удалить</a>
+            {% endif %}
             <a href="{% url 'mail_sender:clients_list' %}" class="btn btn-outline-secondary">К клиентам</a>
         </div>
     </div>

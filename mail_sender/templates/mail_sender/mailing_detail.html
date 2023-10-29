@@ -11,8 +11,12 @@
                 <li>Клиенты: {{object.get_clients}}</li>
             </ul>
             </p>
+            {% if perms.mail_sender.change_mailing_list %}
             <a href="{%url 'mail_sender:mailing_update' object.pk%}" class="btn btn-primary">Редактировать</a>
+            {% endif %}
+            {% if perms.mail_sender.change_delete_list %}
             <a href="{%url 'mail_sender:mailing_delete' object.pk%}" class="btn btn-danger">Удалить</a>
+            {% endif %}
             <a href="{% url 'mail_sender:mailing_list' %}" class="btn btn-outline-secondary">К списку рассылок</a>
         </div>
     </div>

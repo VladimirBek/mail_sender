@@ -104,14 +104,25 @@
                 </svg>
                 <span class="fs-4">Mail Sender Plus</span>
             </a>
-
+            <ul class="nav nav-pills col-5">
+                {% if not user.is_authenticated %}
+                <li class="nav-item"><a href="{% url 'users:user_create' %}" class="nav-link active" aria-current="page">Регистрация</a></li>
+                <li class="nav-item"><a href="{% url 'users:user_login' %}" class="nav-link">Войти</a></li>
+                <a class="p-2 btn btn-outline-primary" href="{% url 'users:forgot_password' %}">Забыли пароль?</a>
+                {% else %}
+                <li class="nav-item"><a href="{% url 'users:profile' %}" class="nav-link active" aria-current="page">Редактировать профиль</a></li>
+                <li class="nav-item"><a href="{% url 'users:user_logout' %}" class="nav-link">Выйти</a></li>
+                {% endif %}
+            </ul>
+            {% if user.is_authenticated %}
             <ul class="nav nav-pills">
-                <li class="nav-item"><a href="/" class="nav-link active" aria-current="page">Домашняя страница</a></li>
                 <li class="nav-item"><a href="{% url 'mail_sender:clients_list' %}" class="nav-link">Кому рассылаем</a></li>
                 <li class="nav-item"><a href="{% url 'mail_sender:mailing_list' %}" class="nav-link">Рассылки</a></li>
                 <li class="nav-item"><a href="{% url 'mail_sender:mail_list' %}" class="nav-link">Письма</a></li>
-                <li class="nav-item"><a href="#" class="nav-link">About</a></li>
+                <li class="nav-item"><a href="{% url 'blog:blogs' %}" class="nav-link">Блог</a></li>
             </ul>
+            {% endif %}
+
         </header>
     </div>
     {% block content %}
