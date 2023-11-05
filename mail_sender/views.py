@@ -1,13 +1,13 @@
 from random import sample
 
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
-from django.db.models import Count
-from django.shortcuts import render
+from django.forms import inlineformset_factory
 from django.urls import reverse_lazy, reverse
 from django.views.generic import ListView, TemplateView, DeleteView, CreateView, UpdateView, DetailView
 
 from blog.models import BlogPost
-from mail_sender.models import Client, MailingList, Mail
+from mail_sender.forms import MailingForm
+from mail_sender.models import Client, MailingList, Mail, Settings
 
 
 class IndexView(LoginRequiredMixin, TemplateView):
@@ -29,8 +29,6 @@ class IndexView(LoginRequiredMixin, TemplateView):
         'unique_clients_count': unique_clients_count,
         'random_posts': random_posts
     }
-
-
 
 
 class ClientsList(LoginRequiredMixin, ListView):
@@ -83,11 +81,34 @@ class MailingDetail(LoginRequiredMixin, DetailView):
     template_name = 'mailing_detail.html'
 
 
-class MailingCreate(LoginRequiredMixin, CreateView):
-    model = MailingList
+class SettingsCreate(LoginRequiredMixin, CreateView):
+    model = Settings
     template_name = 'mailing_form.html'
-    fields = ('name', 'settings', 'settings', 'clients')
+    fields = ('__all__')
     success_url = reverse_lazy('mail_sender:mailing_list')
+
+    def get_context_data(self, **kwargs):
+        context_data = super().get_context_data(**kwargs)
+        MailingFormset = inlineformset_factory(Settings, MailingList, form=MailingForm, extra=1)
+        if self.request.method == 'POST':
+            formset = MailingFormset(self.request.POST, instance=self.object)
+        else:
+            formset = MailingFormset(instance=self.object)
+        context_data['formset'] = formset
+        return context_data
+
+    def form_valid(self, form):
+        context_data = self.get_context_data()
+        formset = context_data['formset']
+        self.object = form.save()
+
+        if formset.is_valid():
+            formset.instance = self.object
+            formset.save()
+        else:
+            return self.form_invalid(form)
+
+        return super().form_valid(form)
 
 
 class MailingUpdate(LoginRequiredMixin, PermissionRequiredMixin, UpdateView):

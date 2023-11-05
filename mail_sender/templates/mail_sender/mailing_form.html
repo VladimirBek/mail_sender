@@ -1,20 +1,44 @@
 {% extends 'base.html' %}
 {% block content %}
 <div class="container">
-    <form method="post" enctype="multipart/form-data" class="form-floating">
-        <div class="px-3 py-3 pt-md-5 pb-md-4 mx-auto">
-            {% csrf_token %}
-            {{ form.as_p }}
-        </div>
-        <button type="submit" class="btn btn-primary">
-            {% if object %}
-            Сохранить
-            {% else %}
-            Добавить рассылку
-            {% endif %}
+    <div class="row">
+        <div class="col-md-6 col-md-offset-6">
+            <form method="post" enctype="multipart/form-data" class="form-floating">
+                <div class="card">
+                    <div class="card header">
+                        <h4>Рассылка</h4>
+                        <div class="card body">
+                            {{ formset.management_form }}
+                            {% for form in formset.forms %}
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                            {% endfor %}
 
-        </button>
-        <a href="{% url 'mail_sender:mailing_list' %}" class="btn btn-secondary">Назад</a>
-    </form>
-</div>
-{% endblock %}
+
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+
+                    <div class="col-6">
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        {% if object %}
+                        Сохранить
+                        {% else %}
+                        Добавить рассылку
+                        {% endif %}
+
+                    </button>
+                    <a href="{% url 'mail_sender:mailing_list' %}" class="btn btn-secondary">Назад</a>
+
+                </div>
+            </form>
+
+        </div>
+    </div>
+
+
+    {% endblock %}
